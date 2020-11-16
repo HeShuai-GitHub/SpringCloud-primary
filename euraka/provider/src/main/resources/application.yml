@@ -1,0 +1,13 @@
+server:
+  port: 9011
+
+spring:
+  application:
+        name: eureka-provider
+  profiles:
+    active: dev
+
+
+
+
+

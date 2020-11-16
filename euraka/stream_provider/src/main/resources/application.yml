@@ -1,0 +1,21 @@
+server:
+  port: 11002
+spring:
+  application:
+    name: stream-provider
+  rabbitmq:
+    addresses: 127.0.0.1
+    port: 5672
+  cloud:
+    stream:
+      binders: # 配置绑定器
+        defaultRabbit:
+          type: rabbit
+      bindings:
+        output:
+          destination: stream # 配置消息发送的exchange
+          producer:
+            partitionKeyExpression: payload # 分区关键字，可以设置根据对象某个特征进行分区，如id，name等；payload是字符串全部匹配
+            partitionCount: 2 # 消费者大小
+        custom_output: # 自定义消息通道
+          destination: stream-custom

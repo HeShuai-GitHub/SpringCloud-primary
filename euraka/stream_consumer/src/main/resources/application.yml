@@ -1,0 +1,24 @@
+server:
+  port: 11001
+spring:
+  application:
+    name: stream-consumer
+  rabbitmq:
+    addresses: 127.0.0.1
+    port: 5672
+  cloud:
+    stream:
+      instance-count: 2 # 消费者总数
+      instance-index: 0 # 当前消费者的索引,没有弄懂这个匹配规则是什么样的
+      binders: # 配置绑定器
+        defaultRabbit:
+          type: rabbit
+      bindings:
+        input:
+          destination: stream # 配置消息发送的exchange
+          group: group1
+          consumer:
+            partitioned: true # 开启消费者分区配置
+        custom_input: # 自定义消息通道
+          destination: stream-custom
+          group: group1 #设置消息的组名称，同一个消息分组，只会有一个consumer去消费信息

@@ -1,0 +1,29 @@
+
+spring:
+  application:
+    name: eureka-sentinel-consumer-rest
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+    sentinel:
+#      配置本地降级规则文件路径，当服务启动时会自动加载到sentinel控制台，文件中的参数配置可参考com.alibaba.csp.sentinel.slots.block.RuleConstant
+      datasource:
+        ds1:
+          file:
+            file: classpath:flowrule.json
+            data-type: json
+            rule-type: flow
+      transport:
+        dashboard: localhost:18080
+server:
+  port: 9111
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9000/eureka/
+      # register-with-eureka: false

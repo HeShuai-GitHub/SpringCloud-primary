@@ -1,0 +1,19 @@
+
+server:
+  port: 8002
+spring:
+  application:
+    name: hystrix-turbine
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9000/eureka/
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+turbine:  # turbine \u6307\u5B9A\u914D\u7F6E
+  app-config: eureka-consumer-rest # \u67E5\u770B\u76F8\u5BF9\u5E94\u670D\u52A1\u96C6\u7FA4\u670D\u52A1\u9694\u79BB\u8BBF\u95EE\u60C5\u51B5\uFF0C\u53EF\u8BBE\u7F6E\u670D\u52A1\u5217\u8868
+  cluster-name-expression: "'default'"
+  # http://127.0.0.1:8002/hystrix
+  # http://127.0.0.1:8002/turbine.stream \u76D1\u63A7\u8FD9\u4E2Aactuator\u5373\u53EF \u67E5\u770B\u76F8\u5BF9\u5E94\u670D\u52A1\u96C6\u7FA4\u7684\u670D\u52A1\u9694\u79BB\u60C5\u51B5\u4E86
+

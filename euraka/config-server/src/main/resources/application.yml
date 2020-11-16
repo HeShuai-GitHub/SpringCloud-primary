@@ -1,0 +1,35 @@
+server:
+  port: 15000
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://gitee.com/heshuai_mayun/config_-server_-repo.git
+#          search-paths:  # git仓库地址下的相对地址 多个用逗号","分割。
+#          username:   #仓库的账号
+#          password: # git仓库的密码。
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9000/eureka/ # ,http://127.0.0.1:8000/eureka/
+    # register-with-eureka: false
+
+# 开启动态刷新请求路径断点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh
+

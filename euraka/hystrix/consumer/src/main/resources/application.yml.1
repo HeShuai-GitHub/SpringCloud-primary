@@ -1,0 +1,91 @@
+spring:
+  application:
+    name: eureka-consumer
+  zipkin:
+    #base-url: http://127.0.0.1:9411
+    base-url: http://127.0.0.1:5672
+    sender:
+      #type: web #数据的传输方式，以http的形式向server端发送数据
+      type: rabbit # 以rabbitmq的方式来实现异步传输
+  sleuth:
+    sampler:
+      probability: 1 # 采样比，1是完全采样
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    listener: #设置请求重试策略
+      direct:
+        retry:
+          enabled: true
+      simple:
+        retry:
+          enabled: true
+server:
+  port: 9002
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9000/eureka/ # ,http://127.0.0.1:8000/eureka/
+    # register-with-eureka: false
+
+#在调用方可以配置 ribbon的负载均衡策略
+#eureka-provider:
+#  ribbon:
+#  # 基于配置文件形式的 针对单个服务的 Ribbon 负载均衡策略
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 1000
+
+# ribbon 单服务请求重试
+eureka-provider:
+  ribbon:
+    ConnectTimeout: 250 #请求连接的超时时间
+    ReadTimeout: 1000 #请求处理的超时时间
+    OkToRetryOnAllOperations: true #对所有操作请求都进行重试
+    MaxAutoRetriesNextServer: 1 #切换实例的重试次数
+    MaxAutoRetries: 1 #对当前实例的重试次数
+
+feign:
+  compression:
+    request:
+      enabled: true # 开启请求压缩 由于开启GZIP压缩之后，Feign之间的调用数据通过二进制协议进行传输，返回值需要修改为ResponseEntity<byte[]>才可以正常显示，否则会导致服务之间的调用乱码。
+      mime-types: text/xml, application/xml, application/json # 压缩类型
+      min-request-size: 2048 # 配置压缩数据大小的下限
+  client:
+    config:
+      eureka-provider: # default 对所有服务进行设置
+        loggerLevel: FULL  #日志打印级别
+  hystrix:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'  # 访问 127.0.0.1:9002/actuator/hystrix.stream 显示 hystrix 访问流数据
+
+# 配置 路由追踪日志打印
+logging:
+  level:
+    root: info
+    org.springframework.web.servlet.DispatcherServlet: debug
+    org.springframework.cloud.sleuth: debug
+
+
+
+

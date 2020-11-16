@@ -1,0 +1,22 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: consul-provider
+  cloud:
+    consul:
+      host: 127.0.0.1 #consul服务器的主机地址
+      port: 8500 #consul服务器的ip地址
+      discovery: #服务注册与发现的相关配置
+        register: true  #是否需要注册
+        instance-id: ${spring.application.name}-1 #注册的实例ID (唯一标志)
+        service-name: ${spring.application.name} # 注册到 Consul 的服务名称，后期客户端会根据这个名称来进行服务调用
+        port: ${server.port} #服务的请求端口
+        prefer-ip-address: true  #指定开启ip地址注册
+        ip-address: ${spring.cloud.client.ip-address} #当前服务的请求ip
+        enabled: false # 启用服务发现
+        deregister: true # 服务停止时取消注册
+        health-check-interval: 5s # 执行监控检查的频率 默认 10s
+        health-check-critical-timeout: 5s # 设置健康检查失败多长时间后，取消注册
+        health-check-path: /actuator/info # 健康检查的路径

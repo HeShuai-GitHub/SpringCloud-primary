@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: sentinel-eureka-feigh-consumer
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+    sentinel:
+      transport:
+        dashboard: localhost:18080
+server:
+  port: 9112
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9000/eureka/
+
+feign:
+  sentinel:
+    enabled: true

@@ -1,0 +1,10 @@
+
+spring:
+  application:
+    name: consumer-common
+
+server:
+  port: 9010
+  tomcat:
+    max-threads: 10
+

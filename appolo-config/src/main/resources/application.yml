@@ -1,0 +1,21 @@
+app:
+  id: apollo-config # AppID，在apollo中创建项目所添加的appID
+
+apollo:
+  meta: http://localhost:8080 # 注册中心地址
+  #cluster: myCluster
+  #cacheDir: /opt/testDir
+  bootstrap: # 开启apollo
+    enable: true
+    namespaces: application
+
+env: DEV
+
+server:
+  port: 16000
+spring:
+  application:
+    name: apollo-config
+
+name: I is name
+

@@ -1,0 +1,30 @@
+spring:
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+  cloud:
+    config:
+      name: application # 配置文件的名称。
+      profile: dev # 配置的策略。
+      label: master # 配置文件的分支，默认是master。如果是是本地获取的话，则无用。
+#       uri: http://127.0.0.1:15000 # 配置配置中心服务端地址
+      discovery:
+        enabled: true #从注册中心中发现配置中心信息
+        serviceId: config-server # 指定注册中心中配置中心的service-id,以便配置高可用集群
+
+## 开启动态刷新请求路径断点
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: refresh
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9000/eureka/ # ,http://127.0.0.1:8000/eureka/

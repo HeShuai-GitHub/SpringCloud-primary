@@ -1,0 +1,20 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: eureka-serverA
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  client:
+    # register-with-eureka: false #是否将自己注册到注册中心
+    # fetch-registry: false #表示是否从 Eureka Server中获取注册信息, 默认为true, 因为这是一个单点的 Eureka Server, 不需要同步其它的 Eureka Server 节点的数据， 故而设置为 false
+    service-url:
+      defaultZone: http://127.0.0.1:9000/eureka/ #, http://127.0.0.1:8000/eureka/  #配置暴露给Eureka Client的请求地址
+  server:
+    enable-self-preservation: false #eureka 自我保护机制，默认true
+    eviction-interval-timer-in-ms: 4000  # 设置剔除间隔时间
+
